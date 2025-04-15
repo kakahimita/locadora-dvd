@@ -3,5 +3,3 @@ export class Genero {
         this.descricao = descricao;
     }
 }
-
-export default Genero;
