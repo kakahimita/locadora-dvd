@@ -6,6 +6,10 @@ Este projeto é um sistema de controle de empréstimo de DVDs desenvolvido em Ja
 
 O sistema permite cadastrar amigos, DVDs e registrar os empréstimos, facilitando o controle e evitando a perda de DVDs.
 
+### Modelo de Classes
+
+![Diagrama de Classes](locadora-dvd/images/diagrama_classes.png)
+
 ### Tecnologias Utilizadas
 
 *   JavaScript
