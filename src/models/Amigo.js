@@ -1,3 +1,4 @@
+import { Pessoa } from "./Pessoa.js";
 export class Amigo extends Pessoa {
     constructor(nome, numTelefone, email, endereco) {
         super(nome);
