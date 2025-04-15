@@ -20,7 +20,7 @@ while (rodando) {
     console.log("2. Cadastrar DVD");
     console.log("0. Sair");
 
-    const opcao = readlineSync.question('Escolha uma opção: ');
+    const opcao = readlineSync.question('Escolha uma opcao: ');
 
     switch (opcao) {
         case '1':
