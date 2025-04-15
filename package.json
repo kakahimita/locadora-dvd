@@ -17,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/kakahimita/locadora-dvd/issues"
   },
-  "homepage": "https://github.com/kakahimita/locadora-dvd#readme"
+  "homepage": "https://github.com/kakahimita/locadora-dvd#readme",
+  "dependencies": {
+    "readline-sync": "^1.4.10"
+  }
 }
