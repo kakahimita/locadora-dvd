@@ -8,7 +8,7 @@ O sistema permite cadastrar amigos, DVDs e registrar os empréstimos, facilitand
 
 ### Modelo de Classes
 
-![Diagrama de Classes](locadora-dvd/images/diagrama_classes.png)
+![Diagrama de Classes](images/diagrama_classes.png)
 
 ### Tecnologias Utilizadas
 
