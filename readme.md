@@ -55,6 +55,8 @@ Esse sistema deve permitir o cadastro dos amigos, incluindo: nome, número do te
     ```bash
     npm install  # Ou yarn install, dependendo do seu gerenciador de pacotes
     ```
+    ```bash
+    npm npm install readline-sync # criar menus simples no terminal para testes
 3.  Execute o sistema:
 
     ```bash
