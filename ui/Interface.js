@@ -1,67 +1,112 @@
-// Interface.js
-import readline from 'readline-sync';
+import { Interface } from "./ui/Interface.js";
+import { CadastroAmigo, CadastroDVD, RegistroEmprestimo, RelatorioEmprestimos } from "./models.js";
+import { Amigo, DVD, Pessoa, Genero, FaixaEtaria } from "./models.js";
 
-export class Interface {
-    imprime(texto) {
-        console.log(texto);
-    }
+// Instâncias principais
+const ui = new Interface();
+const cadastroAmigo = new CadastroAmigo();
+const cadastroDVD = new CadastroDVD();
+const registro = new RegistroEmprestimo();
+const relatorio = new RelatorioEmprestimos(registro);
 
-    imprimeMenu() {
-        console.log("\n===== MENU PRINCIPAL =====");
-        console.log("1 - Cadastrar Amigo");
-        console.log("2 - Cadastrar DVD");
-        console.log("3 - Registrar Empréstimo");
-        console.log("4 - Devolver DVD");
-        console.log("5 - Listar DVDs");
-        console.log("6 - Sair");
-        const opcao = readline.question("Escolha uma opção: ");
-        return opcao;
-    }
+// Loop principal
+let sair = false;
 
-    leAmigo() {
-        const nome = readline.question("Nome do amigo: ");
-        const telefone = readline.question("Telefone: ");
-        const email = readline.question("Email: ");
-        const endereco = readline.question("Endereço: ");
-        return { nome, telefone, email, endereco };
-    }
+while (!sair) {
+  const opcao = ui.imprimeMenu();
 
-    leDVD() {
-        const titulo = readline.question("Título do DVD: ");
-        const sinopse = readline.question("Sinopse: ");
-        const diretor = readline.question("Nome do Diretor: ");
-        const artista = readline.question("Nome do Artista Principal: ");
-        const genero = readline.question("Gênero: ");
+  switch (opcao) {
+    case "1":
+      const dadosAmigo = ui.leAmigo();
+      const faixaEtariaAmigo = new FaixaEtaria(0, 99); // ou pedir do usuário depois se quiser refinar
+      const novoAmigo = new Amigo(
+        dadosAmigo.nome,
+        dadosAmigo.telefone,
+        dadosAmigo.email,
+        dadosAmigo.endereco,
+        faixaEtariaAmigo
+      );
+      cadastroAmigo.inclui(novoAmigo);
+      ui.imprime("✅ Amigo cadastrado com sucesso!");
+      break;
 
-        return {
-            titulo,
-            sinopse,
-            diretor,
-            artista,
-            genero,
-        };
-    }
+    case "2":
+      const dadosDVD = ui.leDVD();
+      const diretor = new Pessoa(dadosDVD.diretor);
+      const artista = new Pessoa(dadosDVD.artista);
+      const genero = new Genero(dadosDVD.genero);
+      const faixaEtaria = new FaixaEtaria(dadosDVD.faixaEtaria.de, dadosDVD.faixaEtaria.ate);
 
-    leFaixaEtaria() {
-        const faixaDe = parseInt(readline.question("Faixa Etária - de: "));
-        const faixaAte = parseInt(readline.question("Faixa Etária - até: "));
+      const novoDVD = new DVD(
+        dadosDVD.titulo,
+        dadosDVD.sinopse,
+        diretor,
+        artista,
+        genero,
+        faixaEtaria
+      );
+      cadastroDVD.inclui(novoDVD);
+      ui.imprime("🎬 DVD cadastrado com sucesso!");
+      break;
 
-        return {
-            de: faixaDe,
-            ate: faixaAte
-        };
-    }
+    case "3":
+      const amigos = cadastroAmigo.listar();
+      const dvds = cadastroDVD.listar();
 
-    leData(mensagem) {
-        const dataString = readline.question(mensagem);
-        return new Date(dataString);
-    }
+      if (amigos.length === 0 || dvds.length === 0) {
+        ui.imprime("⚠️ Não há amigos ou DVDs suficientes para fazer empréstimo.");
+        break;
+      }
 
-    leOpcao(mensagem) {
-        return readline.question(mensagem);
-    }
+      console.log("\nLista de Amigos:");
+      amigos.forEach((a, i) => console.log(`${i} - ${a.nome}`));
+      const indexAmigo = parseInt(prompt("Escolha o índice do amigo: "));
 
-    alertaFaixaEtaria(amigo, dvd) {
-        console.log(`⚠️  O amigo ${amigo.nome} não está na faixa etária permitida para o DVD "${dvd.titulo}".`);
-    }
+      console.log("\nLista de DVDs:");
+      dvds.forEach((d, i) => console.log(`${i} - ${d.titulo}`));
+      const indexDVD = parseInt(prompt("Escolha o índice do DVD: "));
+
+      const amigo = cadastroAmigo.getAmigo(indexAmigo);
+      const dvd = cadastroDVD.getDVD(indexDVD);
+
+      registro.empresta(amigo, dvd);
+      break;
+
+    case "4":
+      const listaEmprestimos = registro.getEmprestimos();
+      if (listaEmprestimos.length === 0) {
+        ui.imprime("Nenhum DVD está emprestado.");
+        break;
+      }
+
+      console.log("\nDVDs emprestados:");
+      listaEmprestimos.forEach((e, i) => {
+        console.log(`${i} - ${e.dvd.titulo} (para ${e.amigo.nome})`);
+      });
+
+      const indiceDevolucao = parseInt(prompt("Escolha o índice do DVD para devolver: "));
+      const dvdDevolver = listaEmprestimos[indiceDevolucao]?.dvd;
+      if (dvdDevolver) {
+        registro.devolve(dvdDevolver);
+      } else {
+        console.log("Índice inválido.");
+      }
+      break;
+
+    case "5":
+      const todosDVDs = cadastroDVD.listar();
+      console.log("\n=== Lista de DVDs Cadastrados ===");
+      todosDVDs.forEach((dvd, i) => {
+        console.log(`${i + 1}. ${dvd.titulo} - ${dvd.genero.descricao}`);
+      });
+      break;
+
+    case "6":
+      sair = true;
+      ui.imprime("👋 Saindo do sistema. Até mais!");
+      break;
+
+    default:
+      ui.imprime("❌ Opção inválida.");
+  }
 }
