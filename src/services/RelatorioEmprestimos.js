@@ -4,7 +4,7 @@ export class RelatorioEmprestimos {
     }
 
     imprimeRelatorio() {
-        const emprestimos = this.registroEmprestimo.getEmprestimos(); // Supondo que esse método existe
+        const emprestimos = this.registroEmprestimo.getEmprestimos();
 
         if (emprestimos.length === 0) {
             console.log("Nenhum empréstimo registrado.");
@@ -16,4 +16,8 @@ export class RelatorioEmprestimos {
             console.log(`${index + 1}. DVD: ${e.dvd.titulo} | Amigo: ${e.amigo.nome} | Emprestado em: ${e.dataEmprestimo.toLocaleDateString()} | Devolver até: ${e.dataDevolver.toLocaleDateString()}`);
         });
     }
+
+    getEmprestimos() {
+        return this.registroEmprestimo;
+      }      
 }

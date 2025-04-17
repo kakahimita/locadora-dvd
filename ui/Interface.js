@@ -1,3 +1,4 @@
+// Interface.js
 import readline from 'readline-sync';
 
 export class Interface {
@@ -31,8 +32,6 @@ export class Interface {
         const diretor = readline.question("Nome do Diretor: ");
         const artista = readline.question("Nome do Artista Principal: ");
         const genero = readline.question("Gênero: ");
-        const faixaDe = parseInt(readline.question("Faixa Etária - de: "));
-        const faixaAte = parseInt(readline.question("Faixa Etária - até: "));
 
         return {
             titulo,
@@ -40,8 +39,26 @@ export class Interface {
             diretor,
             artista,
             genero,
-            faixaEtaria: { de: faixaDe, ate: faixaAte }
         };
+    }
+
+    leFaixaEtaria() {
+        const faixaDe = parseInt(readline.question("Faixa Etária - de: "));
+        const faixaAte = parseInt(readline.question("Faixa Etária - até: "));
+
+        return {
+            de: faixaDe,
+            ate: faixaAte
+        };
+    }
+
+    leData(mensagem) {
+        const dataString = readline.question(mensagem);
+        return new Date(dataString);
+    }
+
+    leOpcao(mensagem) {
+        return readline.question(mensagem);
     }
 
     alertaFaixaEtaria(amigo, dvd) {

@@ -5,6 +5,6 @@ export class FaixaEtaria {
     }
 
     ehAbaixo(outraFaixa) {
-        return this.ate < outraFaixa.de;
+        return outraFaixa.ate < this.de;
     }
 }
